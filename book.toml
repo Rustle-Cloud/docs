@@ -1,0 +1,20 @@
+[book]
+title = "Rustle Docs"
+authors = ["Lucas Bouabdelli"]
+language = "en"
+src = "src"
+
+[output.html]
+default-theme = "navy"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/LucasBob/Rusle"
+edit-url-template = "https://github.com/LucasBob/Rusle/edit/main/docs/{path}"
+additional-css = ["theme/rustle.css"]
+site-url = "/"
+no-section-label = true
+
+[output.html.playground]
+runnable = false
+
+[output.html.search]
+limit-results = 20

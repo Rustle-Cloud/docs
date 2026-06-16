@@ -1,0 +1,87 @@
+/* ============================================================
+   Rustle docs — brand tint over mdBook's "navy" theme.
+   Palette: Rosé Pine Moon (mirrors landing/static/brand/tokens.css).
+   Light touch: we keep mdBook's familiar layout (the Rust-docs wink)
+   and only retheme colours + fonts.
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600&family=Spline+Sans+Mono:wght@400;500;600&display=swap");
+
+/* ---- Rosé Pine Moon mapped onto mdBook's navy theme variables ---- */
+.navy {
+  --bg: #232136;
+  --fg: #e0def4;
+
+  --sidebar-bg: #2a273f;
+  --sidebar-fg: #908caa;
+  --sidebar-non-existant: #6e6a86;
+  --sidebar-active: #c4a7e7;
+  --sidebar-spacer: #393552;
+
+  --scrollbar: #6e6a86;
+
+  --icons: #6e6a86;
+  --icons-hover: #c4a7e7;
+
+  --links: #c4a7e7;
+
+  --inline-code-color: #9ccfd8;
+
+  --theme-popup-bg: #2a273f;
+  --theme-popup-border: #393552;
+  --theme-hover: #393552;
+
+  --quote-bg: #2a273f;
+  --quote-border: #393552;
+
+  --warning-border: #f6c177;
+
+  --table-border-color: rgba(224, 222, 244, 0.10);
+  --table-header-bg: #393552;
+  --table-alternate-bg: #2a273f;
+
+  --searchbar-border-color: rgba(224, 222, 244, 0.16);
+  --searchbar-bg: #2a273f;
+  --searchbar-fg: #e0def4;
+  --searchbar-shadow-color: rgba(0, 0, 0, 0.3);
+  --searchresults-header-fg: #908caa;
+  --searchresults-border-color: #393552;
+  --searchresults-li-bg: #2a273f;
+  --search-mark-bg: #c4a7e7;
+}
+
+/* ---- Typography: brand fonts ---- */
+.navy,
+html body {
+  font-family: "Hanken Grotesk", system-ui, sans-serif;
+}
+.content h1,
+.content h2,
+.content h3,
+.content h4 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.content code,
+pre,
+.hljs,
+code {
+  font-family: "Spline Sans Mono", ui-monospace, monospace;
+}
+
+/* iris underline accent on hovered content links */
+.content a:hover {
+  text-decoration-color: #c4a7e7;
+}
+
+/* the menu-bar title nods to the brand lockup */
+.menu-title {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
+}
+
+/* Redoc embed (API reference page): give it room and a transparent frame */
+redoc {
+  display: block;
+  margin-top: 1rem;
+}
