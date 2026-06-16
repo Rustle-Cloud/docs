@@ -18,8 +18,8 @@ silent drop.
 
 ## Two things to do on every request
 
-1. **Verify `x-radar-signature`** — prove the body really came from Rustle (below).
-2. **[Dedupe on `x-radar-event-id`](../concepts/exactly-once.md)** — delivery is at-least-once.
+1. **Verify `x-radar-signature`**: prove the body really came from Rustle (below).
+2. **[Dedupe on `x-radar-event-id`](../concepts/exactly-once.md)**: delivery is at-least-once.
 
 ## Verifying the signature
 
@@ -61,7 +61,7 @@ def verify(secret: str, raw_body: bytes, header: str) -> bool:
 
 ### Rust
 
-Rustle signs with the same routine it ships for verification — `radar_dispatch::sign::verify`:
+Rustle signs with the same routine it ships for verification, `radar_dispatch::sign::verify`:
 
 ```rust
 use hmac::{Hmac, Mac};

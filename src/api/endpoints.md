@@ -18,22 +18,23 @@ Create a hook: a callback URL + the matching watch. The app enters the poll set 
 | `store` | yes | — | `apple` or `google`. |
 | `app_id` | yes | — | Store-native app id. |
 | `event_type` | yes | — | `review.created` or `rating.dropped`. |
-| `country` | no | `us` | Storefront — see [storefronts](./filters.md#storefronts). |
 | `min_stars` / `max_stars` | no | `1` / `5` | `review.created` star band (each 1–5). |
-| `threshold` | no | — | `rating.dropped` threshold (1–5). |
-| `delta` | no | — | `rating.dropped` delta (0–4). At least one of `threshold`/`delta` is required. |
+| `delta` | no | — | `rating.dropped` delta (0–4). Required for `rating.dropped`. |
 | `source` | no | `api` | Provenance hint: `zapier` / `make` / `n8n` / `api`. |
 | `external_ref` | no | — | Your own correlation crumb (≤ 256 chars). |
+
+A hook covers every storefront you watch for the app (see [storefronts](./filters.md#storefronts));
+there is no per-hook `country`.
 
 ```bash
 curl -X POST https://app.rustle.cloud/api/v1/hooks \
   -H "Authorization: Bearer rsk_your_token" \
   -H "Content-Type: application/json" \
   -d '{"target_url":"https://example.com/hook","store":"google",
-       "app_id":"com.acme.notes","event_type":"rating.dropped","threshold":4.5}'
+       "app_id":"com.acme.notes","event_type":"rating.dropped","delta":0.2}'
 ```
 
-**Response `200`** — returns the hook `id` and the signing `secret` (**shown once**):
+**Response `200`**, returns the hook `id` and the signing `secret` (**shown once**):
 
 ```json
 { "id": "api-1a2b3c4d5e6f7a8b", "secret": "…", "store": "google",
@@ -68,7 +69,7 @@ Returns `204 No Content` on success, or `404` if no hook with that id belongs to
 
 ## GET /api/v1/apps
 
-The apps this account already watches — handy for populating a dropdown. (Subscribe also
+The apps this account already watches, handy for populating a dropdown. (Subscribe also
 accepts free-text app ids.)
 
 ```bash
@@ -77,7 +78,7 @@ curl https://app.rustle.cloud/api/v1/apps -H "Authorization: Bearer rsk_your_tok
 
 ## GET /api/v1/sample
 
-A synthetic, representative event — for a platform's "test trigger" step. It never touches
+A synthetic, representative event, for a platform's "test trigger" step. It never touches
 your data, so any valid token works. Returns a **one-element array**.
 
 ```bash

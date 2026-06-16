@@ -5,7 +5,7 @@ The REST Hook API is authenticated with an **API token**. Issue one in the conso
 
 - Tokens look like `rsk_…` and are shown **once**, when created. Store the value securely.
 - A token is scoped to the account that created it. Every call is automatically limited to
-  that account's hooks — one account's token can never see or touch another's.
+  that account's hooks. One account's token can never see or touch another's.
 - Tokens are stored **only as a SHA-256 hash** server-side; Rustle can verify a token but
   never reproduce it. Lost it? Revoke it and issue a new one.
 - Revoke a token any time from the same Integrations page.
@@ -30,5 +30,5 @@ curl https://app.rustle.cloud/api/v1/hooks \
 
 > **Base URL:** `https://app.rustle.cloud`. All endpoints below are under `/api/v1`.
 
-The signing **secret** returned when you create a hook is a *different* credential — it is
+The signing **secret** returned when you create a hook is a *different* credential: it is
 not an API token, and is used only to [verify webhook signatures](../webhooks/signatures.md).

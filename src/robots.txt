@@ -1,0 +1,5 @@
+# docs.rustle.cloud — allow full crawl.
+User-agent: *
+Allow: /
+
+Sitemap: https://docs.rustle.cloud/sitemap.xml

@@ -5,7 +5,7 @@ From zero to your first event in three steps.
 ## 1. Get an API token
 
 Sign in to the console at [app.rustle.cloud](https://app.rustle.cloud), open **Integrations**,
-and issue a token. It looks like `rsk_…` and is shown **once** — store it somewhere safe.
+and issue a token. It looks like `rsk_…` and is shown **once**; store it somewhere safe.
 
 You authenticate every API call with it, as either header:
 
@@ -36,7 +36,7 @@ curl -X POST https://app.rustle.cloud/api/v1/hooks \
       }'
 ```
 
-The response returns the hook `id` and a **signing secret** (shown once — keep it to
+The response returns the hook `id` and a **signing secret** (shown once; keep it to
 [verify signatures](./webhooks/signatures.md)):
 
 ```json
@@ -50,7 +50,7 @@ The response returns the hook `id` and a **signing secret** (shown once — keep
 }
 ```
 
-That's it — the app is now in the poll set. See [Filters & storefronts](./api/filters.md)
+That's it. The app is now in the poll set. See [Filters & storefronts](./api/filters.md)
 for the full set of options, and [`rating.dropped`](./events/rating-dropped.md) for rating
 alerts.
 
@@ -84,15 +84,29 @@ Content-Type: application/json
   "body": "Crashes on launch since 4.2.",
   "author": "tess_w",
   "app_version": "4.2.0",
-  "country": "us"
+  "country": "us",
+  "enrichment": {
+    "language": "en",
+    "sentiment": "negative",
+    "themes": ["stability_crash", "update_regression"],
+    "is_feature_request": false,
+    "feature_slug": null,
+    "feature_phrase": null,
+    "is_bug_report": true,
+    "severity": "high",
+    "mentions_competitor": false,
+    "competitor_named": null,
+    "other_topic": null,
+    "summary_en": "Crashes on launch since the 4.2 update."
+  }
 }
 ```
 
 Two rules make this safe to consume:
 
-1. **[Dedupe on `event_id`](./concepts/exactly-once.md)** — delivery is at-least-once, so a
+1. **[Dedupe on `event_id`](./concepts/exactly-once.md)**: delivery is at-least-once, so a
    rare redelivery is possible by design.
-2. **[Verify `x-radar-signature`](./webhooks/signatures.md)** — confirm the body really came
+2. **[Verify `x-radar-signature`](./webhooks/signatures.md)**: confirm the body really came
    from Rustle.
 
 To stop receiving events, [remove the hook](./api/endpoints.md#delete-apiv1hooksid):

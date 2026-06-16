@@ -3,12 +3,13 @@ title = "Rustle Docs"
 authors = ["Lucas Bouabdelli"]
 language = "en"
 src = "src"
+description = "Developer documentation for Rustle: App Store and Google Play review and rating events, delivered to your webhook exactly once."
 
 [output.html]
 default-theme = "navy"
 preferred-dark-theme = "navy"
-git-repository-url = "https://github.com/LucasBob/Rusle"
-edit-url-template = "https://github.com/LucasBob/Rusle/edit/main/docs/{path}"
+git-repository-url = "https://github.com/Rustle-Cloud/docs"
+edit-url-template = "https://github.com/Rustle-Cloud/docs/edit/main/{path}"
 additional-css = ["theme/rustle.css"]
 site-url = "/"
 no-section-label = true

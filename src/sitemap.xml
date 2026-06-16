@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hand-maintained sitemap for docs.rustle.cloud. Keep in sync when pages are added to
+  SUMMARY.md. (introduction.html is omitted because mdBook also serves it as the root `/`.)
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://docs.rustle.cloud/</loc><priority>1.0</priority></url>
+  <url><loc>https://docs.rustle.cloud/quickstart.html</loc><priority>0.9</priority></url>
+  <url><loc>https://docs.rustle.cloud/concepts/events.html</loc><priority>0.8</priority></url>
+  <url><loc>https://docs.rustle.cloud/concepts/exactly-once.html</loc><priority>0.8</priority></url>
+  <url><loc>https://docs.rustle.cloud/events/review-created.html</loc><priority>0.8</priority></url>
+  <url><loc>https://docs.rustle.cloud/events/rating-dropped.html</loc><priority>0.8</priority></url>
+  <url><loc>https://docs.rustle.cloud/webhooks/signatures.html</loc><priority>0.8</priority></url>
+  <url><loc>https://docs.rustle.cloud/api/authentication.html</loc><priority>0.7</priority></url>
+  <url><loc>https://docs.rustle.cloud/api/endpoints.html</loc><priority>0.8</priority></url>
+  <url><loc>https://docs.rustle.cloud/api/reference.html</loc><priority>0.7</priority></url>
+  <url><loc>https://docs.rustle.cloud/api/filters.html</loc><priority>0.7</priority></url>
+  <url><loc>https://docs.rustle.cloud/integrations/zapier.html</loc><priority>0.8</priority></url>
+  <url><loc>https://docs.rustle.cloud/reference/changelog.html</loc><priority>0.5</priority></url>
+</urlset>

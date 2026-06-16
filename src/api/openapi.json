@@ -24,11 +24,11 @@
         "tags": [
           "apps"
         ],
-        "summary": "The apps this account already watches — populates a platform UI dropdown (free-text\napp ids are also accepted by subscribe).",
+        "summary": "The apps this account already watches — populates an integration's app dropdown. One\nentry per `(store, app_id)` with the watched storefronts rolled up into `countries`\n(an integration picks an app, not an app-storefront pair). Under attach-only, `subscribe`\naccepts only a `(store, app_id)` listed here, and covers its `countries` by default.",
         "operationId": "list_apps",
         "responses": {
           "200": {
-            "description": "Apps this account already watches (store, app_id, country)"
+            "description": "Apps this account watches (store, app_id, display_name, countries[])"
           },
           "401": {
             "description": "Missing or invalid API token"
@@ -76,7 +76,7 @@
         "tags": [
           "hooks"
         ],
-        "summary": "REST Hook **subscribe**: create an endpoint (callback URL + generated secret + source)\nand the matching watch, ensuring the app enters the poll set. Idempotency is the\nplatform's responsibility (each \"on\" creates one hook); we return a fresh `id` each time.",
+        "summary": "REST Hook **subscribe**: create an endpoint (callback URL + generated secret + source)\nand bind a delivery to an app the account **already watches** in the console. Attach-only\n— it never enrolls a new app into the poll set; an unwatched app is a `409`. Idempotency\nis the platform's responsibility (each \"on\" creates one hook); we return a fresh `id`\neach time.",
         "operationId": "subscribe",
         "requestBody": {
           "content": {
@@ -111,6 +111,16 @@
           },
           "401": {
             "description": "Missing or invalid API token"
+          },
+          "409": {
+            "description": "The account does not watch this app yet — add it in the console first",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -266,14 +276,6 @@
             "description": "Store-native app id (Apple numeric id, Google package name).",
             "example": "284882215"
           },
-          "country": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Storefront/locale to watch (lowercase ISO-3166 alpha-2); defaults to `us`.",
-            "example": "us"
-          },
           "delta": {
             "type": [
               "number",
@@ -292,6 +294,37 @@
               "null"
             ],
             "description": "The platform's correlation crumb (e.g. Zapier's `subscription:<uuid>`)."
+          },
+          "filter_competitor": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "`true` = deliver only reviews that mention a competitor. Two-state: `false` and omitted\nboth mean \"any\"."
+          },
+          "filter_is_bug_report": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Fixed enrichment filters on a `review.created` hook (optional; `review.created` only).\nEach narrows which classified reviews are delivered; applied at fan-out against the\nreview's enrichment block — never on the platform side. Rejected (400) on other hooks.\n\n`true` = deliver only bug reports. Two-state: `false` and omitted both mean \"any\".",
+            "example": true
+          },
+          "filter_severity_min": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Minimum severity to deliver: `medium` | `high` (a floor, not an exact match). `low` is\naccepted but means \"any\" (every review is ≥ low). Omit for any.",
+            "example": "high"
+          },
+          "filter_theme": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Deliver only reviews carrying this enrichment theme (e.g. `stability_crash`). Omit for any.",
+            "example": "stability_crash"
           },
           "max_stars": {
             "type": [
@@ -325,13 +358,6 @@
             "type": "string",
             "description": "The callback URL the platform wants events delivered to (Zapier's catch URL, etc.).",
             "example": "https://hooks.zapier.com/hooks/catch/123/abc"
-          },
-          "threshold": {
-            "type": [
-              "number",
-              "null"
-            ],
-            "format": "double"
           }
         }
       },
@@ -342,15 +368,19 @@
           "secret",
           "store",
           "app_id",
-          "country",
+          "countries",
           "event_type"
         ],
         "properties": {
           "app_id": {
             "type": "string"
           },
-          "country": {
-            "type": "string"
+          "countries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The storefronts this hook covers — every country the account watches for the app.\nA platform narrows further downstream on the payload's `country`."
           },
           "event_type": {
             "type": "string"

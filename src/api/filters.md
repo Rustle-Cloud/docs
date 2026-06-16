@@ -1,10 +1,10 @@
 # Filters & storefronts
 
-Filters decide *which* events a hook receives. They gate **delivery**, never dedupe — a
+Filters decide *which* events a hook receives. They gate **delivery**, never dedupe. A
 review that a filter excludes is still recorded as seen, so widening a filter later never
 replays the back-catalogue.
 
-## `review.created` — star band
+## `review.created`: star band
 
 Set `min_stars` and `max_stars` (each `1`–`5`, with `min ≤ max`). Defaults to `1`–`5` (every
 review).
@@ -13,40 +13,27 @@ review).
 { "event_type": "review.created", "min_stars": 1, "max_stars": 2 }  // only 1–2★ reviews
 ```
 
-## `rating.dropped` — threshold & delta
+## `rating.dropped`: delta
 
-Set a `threshold` (`1`–`5`) and/or a `delta` (`0`–`4`); **at least one is required**.
+Set a `delta` (`0`–`4`); it is **required**.
 
-- `threshold` — fire when the aggregate rating crosses below this value.
-- `delta` — fire when the rating falls by at least this much versus the last observation.
+- `delta`: fire when the rating falls by at least this much versus the last observation.
 
 ```jsonc
-{ "event_type": "rating.dropped", "threshold": 4.5 }            // dips below 4.5
-{ "event_type": "rating.dropped", "delta": 0.2 }               // drops by 0.2+
-{ "event_type": "rating.dropped", "threshold": 4.0, "delta": 0.3 } // either rule
+{ "event_type": "rating.dropped", "delta": 0.2 }  // fires on a 0.2+ drop
 ```
 
 ## Storefronts
 
-A watch targets one storefront via `country` (lowercase ISO-3166 alpha-2; defaults to `us`).
-The catalogue is curated — these are the supported codes:
+A hook does not pick a storefront. It covers **every** storefront you watch for the app in
+the console (console → Apps → add), and each delivered event carries the storefront it came
+from in its `country` field. To act on one storefront only, add a Filter step on `country`
+downstream (lowercase ISO-3166 alpha-2, e.g. `us`, `fr`).
 
-| Code | Storefront | Code | Storefront |
-|------|------------|------|------------|
-| `us` | United States | `se` | Sweden |
-| `gb` | United Kingdom | `br` | Brazil |
-| `ca` | Canada | `mx` | Mexico |
-| `au` | Australia | `jp` | Japan |
-| `ie` | Ireland | `kr` | South Korea |
-| `fr` | France | `in` | India |
-| `de` | Germany | `nl` | Netherlands |
-| `es` | Spain | `it` | Italy |
-
-The same list serves both stores. A `country` outside this set returns `400`. To watch one
-app across several storefronts, register one hook per storefront.
+Which storefronts an app is polled in is chosen once, in the console, when you watch the app.
 
 ## The baseline
 
 Every hook is **forward-looking**: it only receives events that occur at or after it was
-created. There is no lookback — a brand-new hook does not replay reviews already sitting in a
+created. There is no lookback. A brand-new hook does not replay reviews already sitting in a
 store's feed, and `rating.dropped` seeds its baseline silently on first observation.

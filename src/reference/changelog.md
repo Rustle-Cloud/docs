@@ -9,7 +9,10 @@ change to the payload; additive, backward-compatible fields do not bump it.
 |------------------|--------|-------|
 | `1` | Current | `review.created` and `rating.dropped`, the store-agnostic envelope, HMAC-SHA256 signatures. |
 
-Write your consumer defensively: ignore unknown fields, and key your idempotency on
+The optional [`enrichment`](../events/review-created.md#the-enrichment-object) object on
+`review.created` was added under `schema_version` `1` — an additive, backward-compatible
+field, so it did not bump the version. Write your consumer defensively: ignore unknown
+fields, treat `enrichment` as optional (it may be `null`), and key your idempotency on
 [`event_id`](../concepts/exactly-once.md).
 
 ## API

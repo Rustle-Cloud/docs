@@ -1,0 +1,46 @@
+# Build this mdBook and deploy it to GitHub Pages (→ docs.rustle.cloud).
+#
+# This repo (Rustle-Cloud/docs) is the docs site. It is also mounted as a submodule in the
+# product monorepo at `docs/`. The OpenAPI spec (src/api/openapi.json) is generated from the
+# monorepo's Rust handlers by `scripts/gen-openapi.sh` and committed here; this workflow just
+# builds and publishes — it never needs the Rust toolchain.
+name: docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: "0.5.3"
+      - run: mdbook build
+      - name: Inject canonical + Open Graph meta
+        run: python3 scripts/seo.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: book
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

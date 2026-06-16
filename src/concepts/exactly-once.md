@@ -1,7 +1,7 @@
 # Exactly-once & idempotency
 
 Rustle's core promise is that a given review or rating drop produces **at most one delivered
-event** — no double-fires — and that nothing is silently dropped. Here's the contract you
+event**, no double-fires, and that nothing is silently dropped. Here's the contract you
 consume against.
 
 ## Delivery is at-least-once; you dedupe on `event_id`
@@ -18,8 +18,8 @@ rather than risk dropping it. That's the rare redelivery the contract warns abou
 > `event_id`, ignore the redelivery. It's also sent as the `x-radar-event-id` header so you
 > can dedupe before even parsing the body.
 
-`event_id` is **deterministic** — the same occurrence delivered to the same hook always
-produces the same `event_id` — which is exactly what makes consumer-side dedupe reliable.
+`event_id` is **deterministic**, the same occurrence delivered to the same hook always
+produces the same `event_id`, which is exactly what makes consumer-side dedupe reliable.
 
 ```python
 # Pseudocode for an idempotent receiver
@@ -45,7 +45,7 @@ return 200
 
 Two ids, two jobs:
 
-- `event_id` — *this delivery to this hook*. Your idempotency key.
-- `occurrence_id` — *the underlying review or rating drop*, shared if you have several hooks
+- `event_id`: *this delivery to this hook*. Your idempotency key.
+- `occurrence_id`: *the underlying review or rating drop*, shared if you have several hooks
   watching the same app. Use it to recognise "the same thing, delivered to more than one of
   my hooks."
